@@ -1,0 +1,168 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table
+      author: Ruzavin
+      changes:
+        - createTable:
+            tableName: system_user
+            columns:
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: deleted_date
+                  type: timestamptz
+              - column:
+                  name: state
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: refresh_token
+            columns:
+              - column:
+                  name: token_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: created_date
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: deleted_date
+                  type: timestamptz
+              - column:
+                  name: content
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: uuid
+        - addForeignKeyConstraint:
+            baseTableName: refresh_token
+            baseColumnNames: user_id
+            constraintName: user_token_fk
+            referencedTableName: system_user
+            referencedColumnNames: user_id
+        - createTable:
+            tableName: chat
+            columns:
+              - column:
+                  name: chat_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: deleted_date
+                  type: timestamptz
+        - createTable:
+            tableName: message
+            columns:
+              - column:
+                  name: message_id
+                  type: uuid
+              - column:
+                  name: text
+                  type: varchar(255)
+              - column:
+                  name: issuer_id
+                  type: uuid
+              - column:
+                  name: chat_id
+                  type: uuid
+              - column:
+                  name: created_date
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: deleted_date
+                  type: timestamptz
+        - addForeignKeyConstraint:
+            baseTableName: message
+            baseColumnNames: chat_id
+            referencedTableName: chat
+            referencedColumnNames: chat_id
+            constraintName: message_chat_fk
+        - addForeignKeyConstraint:
+            baseTableName: message
+            baseColumnNames: issuer_id
+            referencedTableName: system_user
+            referencedColumnNames: user_id
+            constraintName: message_user_fk
+        - createTable:
+            tableName: chat_user
+            columns:
+              - column:
+                  name: chat_id
+                  type: uuid
+              - column:
+                  name: user_id
+                  type: uuid
+        - addForeignKeyConstraint:
+            baseTableName: chat_user
+            baseColumnNames: chat_id
+            referencedTableName: chat
+            referencedColumnNames: chat_id
+            constraintName: chat_user_fk
+        - addForeignKeyConstraint:
+            baseTableName: chat_user
+            baseColumnNames: user_id
+            referencedTableName: system_user
+            referencedColumnNames: user_id
+            constraintName: user_chat_fk
