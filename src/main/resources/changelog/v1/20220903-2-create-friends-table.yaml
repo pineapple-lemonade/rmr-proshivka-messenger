@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      author: Ruzavin Georgy
+      id: create-table-friends
+      changes:
+        - createTable:
+            tableName: user_friend
+            columns:
+              - column:
+                  name: user_id
+                  type: uuid
+              - column:
+                  name: friend_id
+                  type: uuid
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: user_friend
+            referencedColumnNames: user_id
+            referencedTableName: system_user
+            constraintName: user_friend_fk
+        - addForeignKeyConstraint:
+            baseTableName: user_friend
+            baseColumnNames: friend_id
+            referencedTableName: system_user
+            referencedColumnNames: user_id
+            constraintName: friend_user_fk
