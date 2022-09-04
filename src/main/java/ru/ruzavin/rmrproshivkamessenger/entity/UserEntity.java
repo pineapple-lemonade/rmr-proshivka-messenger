@@ -46,21 +46,29 @@ public class UserEntity extends AbstractEntity{
 	/*
 	 * user refresh tokens
 	 */
-	@ToString.Exclude
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	@ToString.Exclude
 	Set<RefreshTokenEntity> tokens;
 
 	@ManyToMany(mappedBy = "users")
 	@ToString.Exclude
 	Set<ChatEntity> chats;
 
+	/*
+	 * field to perform M2M
+	 */
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_friend", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "user_id"))
+	@ToString.Exclude
 	Set<UserEntity> users;
 
+	/*
+	 * list of user friends
+	 */
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_friend", joinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "user_id"),
 	inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
+	@ToString.Exclude
 	Set<UserEntity> friends;
 }

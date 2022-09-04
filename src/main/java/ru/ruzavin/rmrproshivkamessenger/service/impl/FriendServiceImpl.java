@@ -16,7 +16,6 @@ import ru.ruzavin.rmrproshivkamessenger.repository.UserRepository;
 import ru.ruzavin.rmrproshivkamessenger.security.details.UserDetailsImpl;
 import ru.ruzavin.rmrproshivkamessenger.service.FriendService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

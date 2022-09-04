@@ -33,12 +33,12 @@ public class MessageEntity extends AbstractEntity{
 	 */
 	@ManyToOne
 	@JoinColumn(name = "issuer_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(name = "message_user_id"))
-	UserEntity user;
+	UserEntity issuer;
 
 	/*
 	 * chat that message belongs to
 	 */
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "chat_id", referencedColumnName = "chat_id", foreignKey = @ForeignKey(name = "message_chat_id"))
 	ChatEntity chat;
 }
