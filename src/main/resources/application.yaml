@@ -23,3 +23,9 @@ application:
         time: 86400000
 jwt:
   secret: goshanchik
+sms:
+  email: ${SMS_AERO_EMAIL}
+  api-key: ${SMS_AERO_API_KEY}
+  sms-text: ${SMS_TEXT:Your authentication code}
+  sms-sign: ${SMS_SIGN:RMR RUZAVIN}
+  enabled: ${SMS_ENABLED:false}
