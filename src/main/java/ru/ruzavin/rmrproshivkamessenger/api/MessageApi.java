@@ -29,7 +29,8 @@ public interface MessageApi {
 			content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	@PostMapping("/{chat_id}")
 	@ResponseStatus(HttpStatus.CREATED)
-	SuccessResponse<MessageModel> sendMessageToChat(@PathVariable("chat_id") UUID chatId, SendMessageRequest request,
+	SuccessResponse<MessageModel> sendMessageToChat(@PathVariable("chat_id") UUID chatId,
+	                                                @RequestBody SendMessageRequest request,
 	                                                @Parameter(hidden = true)
 	                                                @AuthenticationPrincipal UserDetailsImpl userDetails);
 

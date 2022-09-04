@@ -9,14 +9,13 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LoginRequest {
-
+public class CreateUserRequest {
 	@Schema(name = "name", description = "name of user")
 	String name;
 
-	@Schema(name = "password")
+	@Schema(name = "password", description = "password of user")
 	String password;
 
-	@Schema(name = "smsCode", description = "code for authentication")
-	String smsCode;
+	@Schema(name = "phone", description = "phone of user that uses for authentication")
+	String phone;
 }

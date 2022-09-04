@@ -41,6 +41,6 @@ public interface FriendApi {
 			content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	SuccessResponse<UserModel> addFriend(AddFriendRequest request,
+	SuccessResponse<UserModel> addFriend(@RequestBody AddFriendRequest request,
 	                                     @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails);
 }

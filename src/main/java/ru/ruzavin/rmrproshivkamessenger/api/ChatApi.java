@@ -45,7 +45,7 @@ public interface ChatApi {
 			content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	SuccessResponse<ChatModel> createGroupChat(CreateGroupChatRequest request,
+	SuccessResponse<ChatModel> createGroupChat(@RequestBody CreateGroupChatRequest request,
 	                                           @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails);
 
 	@Operation(summary = "get messages from given chat",
