@@ -39,6 +39,9 @@ public class UserEntity extends AbstractEntity{
 	@Column(name = "password", nullable = false)
 	String password;
 
+	@Column(name = "sms_code")
+	String smsCode;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "state", nullable = false)
 	UserState state;

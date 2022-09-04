@@ -2,6 +2,7 @@ package ru.ruzavin.rmrproshivkamessenger.security.filters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,9 +11,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import ru.ruzavin.rmrproshivkamessenger.dto.model.TokenPairModel;
 import ru.ruzavin.rmrproshivkamessenger.dto.request.LoginRequest;
+import ru.ruzavin.rmrproshivkamessenger.dto.response.SendSmsResponse;
 import ru.ruzavin.rmrproshivkamessenger.security.details.UserDetailsImpl;
+import ru.ruzavin.rmrproshivkamessenger.security.service.SmsService;
 import ru.ruzavin.rmrproshivkamessenger.security.util.JwtUtil;
 
 import javax.servlet.FilterChain;
@@ -26,20 +31,24 @@ import static ru.ruzavin.rmrproshivkamessenger.security.constants.SecurityConsta
 
 @Component
 @DependsOn("securityConfig")
+@Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	private final ObjectMapper objectMapper;
 
 	private final JwtUtil jwtUtil;
 
+	private final SmsService smsService;
+
 	public JwtAuthenticationFilter(ObjectMapper objectMapper,
 	                               JwtUtil jwtUtil,
-	                               AuthenticationConfiguration authenticationConfiguration) throws Exception {
-		//TODO redirect
+	                               AuthenticationConfiguration authenticationConfiguration,
+	                               SmsService smsService) throws Exception {
 		setAuthenticationManager(authenticationConfiguration.getAuthenticationManager());
 		this.setFilterProcessesUrl(AUTHENTICATION_URL);
 		this.objectMapper = objectMapper;
 		this.jwtUtil = jwtUtil;
+		this.smsService = smsService;
 	}
 
 	@Override
@@ -56,10 +65,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String password = loginRequest.getPassword();
 		password = (password != null) ? password : "";
 
-		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
-		setDetails(request, authRequest);
+		if (StringUtils.isEmpty(loginRequest.getSmsCode())) {
+			SendSmsResponse sendSmsResponse = smsService.sendSms(loginRequest.getPhone());
+			log.info("sms was sent {}", sendSmsResponse);
 
-		return this.getAuthenticationManager().authenticate(authRequest);
+			throw new AuthenticationServiceException("Request don't have sms code");
+		}
+
+		if (smsService.checkCode(loginRequest.getSmsCode(), loginRequest.getPhone())) {
+			UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
+			setDetails(request, authRequest);
+
+			return this.getAuthenticationManager().authenticate(authRequest);
+		} else {
+			throw new AuthenticationServiceException("Sms don't verified");
+		}
 	}
 
 	@Override

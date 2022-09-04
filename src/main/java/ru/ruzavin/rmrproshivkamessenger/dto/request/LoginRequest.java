@@ -19,4 +19,7 @@ public class LoginRequest {
 
 	@Schema(name = "smsCode", description = "code for authentication")
 	String smsCode;
+
+	@Schema(name = "phone", description = "phone number where auth sms code will send")
+	String phone;
 }
