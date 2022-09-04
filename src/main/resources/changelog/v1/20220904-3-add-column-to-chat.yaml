@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      author: Ruzavin Georgy
+      id: add latest message column
+      changes:
+        - addColumn:
+            tableName: chat
+            columns:
+              - column:
+                  name: latest_message
+                  type: timestamptz

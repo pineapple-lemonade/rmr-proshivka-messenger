@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 import ru.ruzavin.rmrproshivkamessenger.entity.enums.ChatType;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -42,4 +43,7 @@ public class ChatEntity extends AbstractEntity {
 	name = "chat_user")
 	@ToString.Exclude
 	Set<UserEntity> users;
+
+	@Column(name = "latest_message")
+	OffsetDateTime latestMessage;
 }

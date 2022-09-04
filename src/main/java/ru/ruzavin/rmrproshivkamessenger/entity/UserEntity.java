@@ -53,4 +53,14 @@ public class UserEntity extends AbstractEntity{
 	@ManyToMany(mappedBy = "users")
 	@ToString.Exclude
 	Set<ChatEntity> chats;
+
+	@ManyToMany
+	@JoinTable(name = "user_friend", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "user_id"))
+	Set<UserEntity> users;
+
+	@ManyToMany
+	@JoinTable(name = "user_friend", joinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "user_id"),
+	inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
+	Set<UserEntity> friends;
 }

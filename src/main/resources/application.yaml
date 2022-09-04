@@ -9,3 +9,17 @@ spring:
       ddl-auto: validate
   liquibase:
     change-log: classpath:changelog/database_changelog.yaml
+default:
+  page:
+    number: 0
+    size: 10
+application:
+  token:
+    access:
+      expires:
+        time: 3600000
+    refresh:
+      expires:
+        time: 86400000
+jwt:
+  secret: goshanchik
