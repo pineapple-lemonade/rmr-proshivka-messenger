@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.ruzavin.rmrproshivkamessenger.dto.model.ChatModel;
 import ru.ruzavin.rmrproshivkamessenger.dto.model.MessageModel;
 import ru.ruzavin.rmrproshivkamessenger.dto.request.SendMessageRequest;
 import ru.ruzavin.rmrproshivkamessenger.dto.response.ErrorResponse;

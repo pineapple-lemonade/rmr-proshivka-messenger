@@ -54,12 +54,12 @@ public class UserEntity extends AbstractEntity{
 	@ToString.Exclude
 	Set<ChatEntity> chats;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_friend", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "user_id"))
 	Set<UserEntity> users;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_friend", joinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "user_id"),
 	inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
 	Set<UserEntity> friends;

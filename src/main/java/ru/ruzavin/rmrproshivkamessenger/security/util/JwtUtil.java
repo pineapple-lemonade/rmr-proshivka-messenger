@@ -103,7 +103,7 @@ public class JwtUtil {
 	}
 
 	public void saveRefreshTokenInDB(UserDetailsImpl userDetails, TokenPairModel tokens) {
-		var user = userRepository.getUserEntityByName(userDetails.getUsername())
+		var user = userRepository.findUserEntityByName(userDetails.getUsername())
 				.orElseThrow(() -> new UsernameNotFoundException("user with name "
 						.concat(userDetails.getUsername()).concat(" not found")));
 

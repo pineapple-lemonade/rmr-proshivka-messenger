@@ -56,6 +56,9 @@ public class ChatServiceImpl implements ChatService {
 					.type(ChatType.PRIVATE)
 					.users(Set.of(user, friend))
 					.build();
+
+			user.getChats().add(chat);
+
 			return chatMapper.fromEntity(chatRepository.save(chat));
 		} else {
 			throw new FriendNotExistsException("this user don't have such friend");
@@ -80,6 +83,8 @@ public class ChatServiceImpl implements ChatService {
 					.type(ChatType.GROUP)
 					.messages(Collections.emptySet())
 					.build();
+
+			user.getChats().add(chat);
 
 			return chatMapper.fromEntity(chatRepository.save(chat));
 		}

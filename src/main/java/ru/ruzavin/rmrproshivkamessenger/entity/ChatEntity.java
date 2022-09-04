@@ -37,7 +37,7 @@ public class ChatEntity extends AbstractEntity {
 	/*
 	 * chat may have a lot of users because chat can be group or private
 	 */
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(joinColumns = @JoinColumn(name = "chat_id", referencedColumnName = "chat_id"),
 	inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
 	name = "chat_user")
