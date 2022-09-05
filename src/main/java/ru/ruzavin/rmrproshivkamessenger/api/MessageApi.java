@@ -45,8 +45,8 @@ public interface MessageApi {
 	@GetMapping("/{chat_id}")
 	@ResponseStatus(HttpStatus.OK)
 	PageResponse<List<MessageModel>> getMessagesFromChat(@PathVariable("chat_id") UUID chatId,
-	                                                     @RequestParam(value = "page_size", required = false) int pageSize,
-	                                                     @RequestParam(value = "pag_number", required = false) int pageNumber,
+	                                                     @RequestParam(value = "page_size", required = false) Integer pageSize,
+	                                                     @RequestParam(value = "page_number", required = false) Integer pageNumber,
 	                                                     @Parameter(hidden = true)
 	                                                     @AuthenticationPrincipal UserDetailsImpl userDetails);
 }

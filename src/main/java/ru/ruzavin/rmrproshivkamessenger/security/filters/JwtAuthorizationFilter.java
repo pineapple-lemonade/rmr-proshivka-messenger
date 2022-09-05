@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static ru.ruzavin.rmrproshivkamessenger.security.constants.SecurityConstants.AUTHENTICATION_URL;
-import static ru.ruzavin.rmrproshivkamessenger.security.constants.SecurityConstants.REFRESH_TOKEN_URL;
+import static ru.ruzavin.rmrproshivkamessenger.security.constants.SecurityConstants.*;
 import static ru.ruzavin.rmrproshivkamessenger.security.util.AuthorizationHeaderUtil.getToken;
 import static ru.ruzavin.rmrproshivkamessenger.security.util.AuthorizationHeaderUtil.hasAuthorizationToken;
 
@@ -29,7 +28,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-		if (request.getServletPath().equals(AUTHENTICATION_URL) || request.getServletPath().equals(REFRESH_TOKEN_URL)) {
+		if (request.getServletPath().equals(AUTHENTICATION_URL)
+				|| request.getServletPath().equals(REFRESH_TOKEN_URL)
+				|| request.getServletPath().equals(SIGN_UP_URL)) {
 			filterChain.doFilter(request, response);
 		} else {
 			if (hasAuthorizationToken(request)) {

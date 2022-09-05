@@ -35,7 +35,7 @@ public class MessageController implements MessageApi {
 	}
 
 	@Override
-	public PageResponse<List<MessageModel>> getMessagesFromChat(UUID chatId, int pageSize, int pageNumber,
+	public PageResponse<List<MessageModel>> getMessagesFromChat(UUID chatId, Integer pageSize, Integer pageNumber,
 	                                                            UserDetailsImpl userDetails) {
 		Page<MessageModel> messagesFromChat =
 				messageService.getMessagesFromChat(chatId, pageSize, pageNumber, userDetails);

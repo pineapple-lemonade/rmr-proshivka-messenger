@@ -9,5 +9,5 @@ import java.util.UUID;
 
 public interface MessageService {
 	MessageModel sendMessage(UUID chatId, SendMessageRequest request, UserDetailsImpl userDetails);
-	Page<MessageModel> getMessagesFromChat(UUID chatId, int pageSize, int pageNumber, UserDetailsImpl userDetails);
+	Page<MessageModel> getMessagesFromChat(UUID chatId, Integer pageSize, Integer pageNumber, UserDetailsImpl userDetails);
 }

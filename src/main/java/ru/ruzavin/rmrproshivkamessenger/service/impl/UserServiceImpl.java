@@ -14,6 +14,7 @@ import ru.ruzavin.rmrproshivkamessenger.repository.UserRepository;
 import ru.ruzavin.rmrproshivkamessenger.service.UserService;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +29,10 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	@Override
 	public UserModel createUser(CreateUserRequest request) {
-		userRepository.findUserEntityByPhone(request.getPhone()).orElseThrow(UserAlreadyExistsException::new);
+		Optional<UserEntity> userEntityByPhone = userRepository.findUserEntityByPhone(request.getPhone());
+		if (userEntityByPhone.isPresent()) {
+			throw new UserAlreadyExistsException();
+		}
 
 		UserEntity newUser = UserEntity.builder()
 				.chats(Collections.emptySet())

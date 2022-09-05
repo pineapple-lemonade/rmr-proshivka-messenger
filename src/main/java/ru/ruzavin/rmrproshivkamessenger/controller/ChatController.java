@@ -52,7 +52,9 @@ public class ChatController implements ChatApi {
 				.data(latestChats.getContent())
 				.message("latest chats received")
 				.status(HttpStatus.OK)
+				.timestamp(LocalDateTime.now())
 				.page(latestChats.getNumber())
+				.size(latestChats.getSize())
 				.totalElements(latestChats.getTotalElements())
 				.totalPages(latestChats.getTotalPages())
 				.build();
