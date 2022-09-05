@@ -75,9 +75,11 @@ public class OpenApiConfig {
 	private Components buildComponents() {
 		Schema<?> emailAndPassword = new Schema<>()
 				.type("object")
-				.description("Name and password")
+				.description("Name and password, phone and code")
 				.addProperty("name", new Schema<>().type(STRING_TYPE))
-				.addProperty("password", new Schema<>().type(STRING_TYPE));
+				.addProperty("password", new Schema<>().type(STRING_TYPE))
+				.addProperty("phone", new Schema<>().type(STRING_TYPE))
+				.addProperty("smsCode", new Schema<>().type(STRING_TYPE));
 
 		Schema<?> tokens = new Schema<>()
 				.type("object")

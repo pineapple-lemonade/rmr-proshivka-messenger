@@ -15,11 +15,10 @@ import ru.ruzavin.rmrproshivkamessenger.mapper.UserMapper;
 import ru.ruzavin.rmrproshivkamessenger.repository.UserRepository;
 import ru.ruzavin.rmrproshivkamessenger.security.details.UserDetailsImpl;
 import ru.ruzavin.rmrproshivkamessenger.service.FriendService;
+import ru.ruzavin.rmrproshivkamessenger.util.RequestParamUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static ru.ruzavin.rmrproshivkamessenger.util.RequestParamUtil.handlePageSizeAndPageNumber;
 
 @Service
 @RequiredArgsConstructor
@@ -29,13 +28,16 @@ public class FriendServiceImpl implements FriendService {
 
 	private final UserMapper userMapper;
 
+	private final RequestParamUtil requestParamUtil;
+
 	@Transactional(readOnly = true)
 	@Override
-	public Page<UserModel> getFriendsList(int pageSize, int pageNumber, UserDetailsImpl userDetails) {
-		handlePageSizeAndPageNumber(pageSize, pageNumber);
+	public Page<UserModel> getFriendsList(Integer pageSize, Integer pageNumber, UserDetailsImpl userDetails) {
+		pageSize = requestParamUtil.handlePageSize(pageSize);
+		pageNumber = requestParamUtil.handlePageNumber(pageNumber);
 		PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
-		UserEntity user = userDetails.getUser();
+		UserEntity user = userRepository.getReferenceById(userDetails.getUser().getUserId());
 		List<UserModel> listOfFriends = user.getFriends().stream()
 				.map(userMapper::fromEntity)
 				.collect(Collectors.toList());
@@ -48,7 +50,7 @@ public class FriendServiceImpl implements FriendService {
 	public UserModel addFriend(AddFriendRequest request, UserDetailsImpl userDetails) {
 		UserEntity friend = userRepository.findUserEntityByPhone(request.getPhone())
 				.orElseThrow(() -> new UserNotExistsException("user with such phone not exists"));
-		UserEntity user = userDetails.getUser();
+		UserEntity user = userRepository.getReferenceById(userDetails.getUser().getUserId());
 
 		if (user.getFriends().contains(friend)) {
 			throw new FriendAlreadyAddedException("user already have such friend");

@@ -1,29 +1,20 @@
 package ru.ruzavin.rmrproshivkamessenger.util;
 
-import lombok.experimental.UtilityClass;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import ru.ruzavin.rmrproshivkamessenger.config.PageConfigurationProperties;
 
-import javax.annotation.PostConstruct;
-
-@UtilityClass
+@Component
+@RequiredArgsConstructor
 public class RequestParamUtil {
-	@Value("${default.page.size}")
-	private Integer defaultPageSizeValue;
 
-	@Value("${default.page.number}")
-	private Integer defaultPageNumberValue;
+	private final PageConfigurationProperties pageConfigurationProperties;
 
-	private static Integer defaultPageSize;
-	private static Integer defaultPageNumber;
-
-	@PostConstruct
-	private void requestParamUtil() {
-		defaultPageSize = defaultPageSizeValue;
-		defaultPageNumber = defaultPageNumberValue;
+	public Integer handlePageSize(Integer pageSize) {
+		return pageSize != null ? pageSize : pageConfigurationProperties.getSize();
 	}
 
-	public static void handlePageSizeAndPageNumber(Integer pageSize, Integer pageNumber) {
-		pageNumber = pageNumber != null ? pageNumber : defaultPageNumber;
-		pageSize = pageSize != null ? pageSize : defaultPageSize;
+	public Integer handlePageNumber(Integer pageNumber) {
+		return pageNumber != null ? pageNumber : pageConfigurationProperties.getNumber();
 	}
 }

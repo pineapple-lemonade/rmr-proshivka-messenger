@@ -1,16 +1,17 @@
 package ru.ruzavin.rmrproshivkamessenger.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.ruzavin.rmrproshivkamessenger.config.PageConfigurationProperties;
 import ru.ruzavin.rmrproshivkamessenger.dto.model.ChatModel;
 import ru.ruzavin.rmrproshivkamessenger.dto.request.CreateGroupChatRequest;
 import ru.ruzavin.rmrproshivkamessenger.entity.ChatEntity;
 import ru.ruzavin.rmrproshivkamessenger.entity.UserEntity;
 import ru.ruzavin.rmrproshivkamessenger.entity.enums.ChatType;
+import ru.ruzavin.rmrproshivkamessenger.exception.ChatAlreadyExistsException;
 import ru.ruzavin.rmrproshivkamessenger.exception.FriendNotExistsException;
 import ru.ruzavin.rmrproshivkamessenger.exception.UserNotExistsException;
 import ru.ruzavin.rmrproshivkamessenger.mapper.ChatMapper;
@@ -19,6 +20,7 @@ import ru.ruzavin.rmrproshivkamessenger.repository.UserRepository;
 import ru.ruzavin.rmrproshivkamessenger.security.details.UserDetailsImpl;
 import ru.ruzavin.rmrproshivkamessenger.service.ChatService;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 
 
@@ -32,22 +34,19 @@ public class ChatServiceImpl implements ChatService {
 
 	private final ChatMapper chatMapper;
 
-	@Value("${default.page.number}")
-	private int pageNumber;
-
-	@Value("${default.page.size}")
-	private int pageSize;
+	private final PageConfigurationProperties pageConfigurationProperties;
 
 	@Transactional
 	@Override
 	public ChatModel createChat(UUID userId, UserDetailsImpl userDetails) {
 		UserEntity friend = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotExistsException("user not exists"));
-		UserEntity user = userDetails.getUser();
+		UserEntity user = userRepository.getReferenceById(userDetails.getUser().getUserId());
 
-		Optional<ChatEntity> chatFromDB = chatRepository.findChatEntityByUsersIn(Set.of(friend, user));
+		List<UUID> userIds = List.of(friend.getUserId(), user.getUserId());
+		Optional<ChatEntity> chatFromDB = chatRepository.findChatEntityByUsersIds(userIds, (long) userIds.size());
 		if (chatFromDB.isPresent()) {
-			return chatMapper.fromEntity(chatFromDB.get());
+			throw new ChatAlreadyExistsException();
 		}
 
 		if (user.getFriends().contains(friend)) {
@@ -55,6 +54,7 @@ public class ChatServiceImpl implements ChatService {
 					.messages(Collections.emptySet())
 					.type(ChatType.PRIVATE)
 					.users(Set.of(user, friend))
+					.latestMessage(OffsetDateTime.now())
 					.build();
 
 			user.getChats().add(chat);
@@ -69,7 +69,7 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public ChatModel createGroupChat(CreateGroupChatRequest request, UserDetailsImpl userDetails) {
 		List<UserEntity> friends = userRepository.findAllByUserIdIn(request.getUserIds());
-		UserEntity user = userDetails.getUser();
+		UserEntity user = userRepository.getReferenceById(userDetails.getUser().getUserId());
 		Set<UserEntity> userFriends = user.getFriends();
 
 		if (friends.isEmpty() || !userFriends.containsAll(friends)) {
@@ -93,9 +93,10 @@ public class ChatServiceImpl implements ChatService {
 	@Transactional
 	@Override
 	public Page<ChatModel> getLatestChats(UserDetailsImpl userDetails) {
-		PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+		PageRequest pageRequest = PageRequest.of(pageConfigurationProperties.getNumber(),
+				pageConfigurationProperties.getSize());
 
-		UserEntity user = userDetails.getUser();
+		UserEntity user = userRepository.getReferenceById(userDetails.getUser().getUserId());
 		Page<ChatEntity> latestChats =
 				chatRepository.findAllByUsersInOrderByLatestMessageDesc(pageRequest, Set.of(user));
 

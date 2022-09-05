@@ -27,7 +27,6 @@ public class RefreshTokenAuthenticationProvider implements AuthenticationProvide
 			log.error("error with message {}", e.getMessage(), e);
 			throw new RefreshTokenException(e.getMessage(), e);
 		}
-
 	}
 
 	@Override

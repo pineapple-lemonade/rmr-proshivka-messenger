@@ -48,10 +48,10 @@ public interface ChatApi {
 	SuccessResponse<ChatModel> createGroupChat(@RequestBody CreateGroupChatRequest request,
 	                                           @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails);
 
-	@Operation(summary = "get messages from given chat",
+	@Operation(summary = "get latest chats",
 			parameters = {@Parameter(name = "page_size", description = "size of page"),
 					@Parameter(name = "page_number", description = "number of page")})
-	@ApiResponse(responseCode = "200", description = "chat successfully received",
+	@ApiResponse(responseCode = "200", description = "chats successfully received",
 			content = @Content(schema = @Schema(implementation = SuccessResponse.class)))
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)

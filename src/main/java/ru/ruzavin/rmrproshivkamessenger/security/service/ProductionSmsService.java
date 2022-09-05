@@ -1,11 +1,11 @@
 package ru.ruzavin.rmrproshivkamessenger.security.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ruzavin.rmrproshivkamessenger.client.SmsClient;
+import ru.ruzavin.rmrproshivkamessenger.config.SmsConfigProperties;
 import ru.ruzavin.rmrproshivkamessenger.dto.response.SendSmsResponse;
 import ru.ruzavin.rmrproshivkamessenger.entity.UserEntity;
 import ru.ruzavin.rmrproshivkamessenger.exception.UserNotExistsException;
@@ -22,11 +22,7 @@ public class ProductionSmsService implements SmsService{
 
 	private final SmsClient smsClient;
 
-	@Value("${sms.sign}")
-	private String sign;
-
-	@Value("${sms.text}")
-	private String text;
+	private final SmsConfigProperties smsConfigProperties;
 
 	@Transactional
 	@Override
@@ -38,7 +34,11 @@ public class ProductionSmsService implements SmsService{
 		user.setSmsCode(smsCode);
 		userRepository.save(user);
 
-		return smsClient.sendSmsCode(phone, sign, text.concat(" ").concat(smsCode));
+		String message = smsConfigProperties.getSmsText().concat(" ").concat(smsCode);
+
+		smsClient.performAuthentication();
+
+		return smsClient.sendSmsCode(phone, smsConfigProperties.getSmsSign(), message);
 	}
 
 	@Transactional

@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 import static ru.ruzavin.rmrproshivkamessenger.security.constants.SecurityConstants.AUTHENTICATION_URL;
 
 @Component
-@DependsOn("securityConfig")
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -44,7 +43,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	                               JwtUtil jwtUtil,
 	                               AuthenticationConfiguration authenticationConfiguration,
 	                               SmsService smsService) throws Exception {
-		setAuthenticationManager(authenticationConfiguration.getAuthenticationManager());
+		super(authenticationConfiguration.getAuthenticationManager());
 		this.setFilterProcessesUrl(AUTHENTICATION_URL);
 		this.objectMapper = objectMapper;
 		this.jwtUtil = jwtUtil;
@@ -65,7 +64,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String password = loginRequest.getPassword();
 		password = (password != null) ? password : "";
 
-		if (StringUtils.isEmpty(loginRequest.getSmsCode())) {
+		if (ObjectUtils.isEmpty(loginRequest.getSmsCode())) {
 			SendSmsResponse sendSmsResponse = smsService.sendSms(loginRequest.getPhone());
 			log.info("sms was sent {}", sendSmsResponse);
 

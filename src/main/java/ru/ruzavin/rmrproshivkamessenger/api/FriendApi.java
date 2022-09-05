@@ -28,8 +28,8 @@ public interface FriendApi {
 			content = @Content(schema = @Schema(implementation = PageResponse.class)))
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	PageResponse<List<UserModel>> getFriendsList(@RequestParam(value = "page_size", required = false) int pageSize,
-	                                             @RequestParam(value = "page_number", required = false) int pageNumber,
+	PageResponse<List<UserModel>> getFriendsList(@RequestParam(value = "page_size", required = false) Integer pageSize,
+	                                             @RequestParam(value = "page_number", required = false) Integer pageNumber,
 	                                             @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails);
 
 	@Operation(summary = "add friend to user's list")

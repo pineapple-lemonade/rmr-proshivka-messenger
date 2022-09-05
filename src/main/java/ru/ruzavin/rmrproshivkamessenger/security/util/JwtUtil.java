@@ -6,11 +6,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.*;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -49,14 +47,12 @@ public class JwtUtil {
 		String accessToken = JWT.create()
 				.withSubject(userDetails.getUsername())
 				.withExpiresAt(new Date(System.currentTimeMillis() + accessTokenExpiresTime))
-				.withClaim("role", userDetails.getAuthorities().iterator().next().getAuthority())
 				.withIssuer(issuer)
 				.sign(algorithm);
 
 		String refreshToken = JWT.create()
 				.withSubject(userDetails.getUsername())
 				.withExpiresAt(new Date(System.currentTimeMillis() + refreshTokenExpiresTime))
-				.withClaim("role", userDetails.getAuthorities().iterator().next().getAuthority())
 				.withIssuer(issuer)
 				.sign(algorithm);
 
@@ -75,15 +71,9 @@ public class JwtUtil {
 		UserDetailsImpl userDetails =
 				(UserDetailsImpl) userDetailsServiceImpl.loadUserByUsername(parsedToken.getEmail());
 
-		if (ObjectUtils.isEmpty(userDetails.getPassword())) {
-			return new UsernamePasswordAuthenticationToken(userDetails,
-					"",
-					Collections.singleton(new SimpleGrantedAuthority(parsedToken.getRole())));
-		}
-
 		return new UsernamePasswordAuthenticationToken(userDetails,
 				userDetails.getPassword(),
-				Collections.singleton(new SimpleGrantedAuthority(parsedToken.getRole())));
+				Collections.emptyList());
 	}
 
 	private ParsedToken parse(String token) throws JWTVerificationException {
@@ -94,10 +84,8 @@ public class JwtUtil {
 		DecodedJWT decodedJWT = jwtVerifier.verify(token);
 
 		String email = decodedJWT.getSubject();
-		String role = decodedJWT.getClaim("role").asString();
 
 		return ParsedToken.builder()
-				.role(role)
 				.email(email)
 				.build();
 	}

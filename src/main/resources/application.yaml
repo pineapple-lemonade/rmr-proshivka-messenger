@@ -1,4 +1,5 @@
 spring:
+
   datasource:
     url: jdbc:postgresql://localhost:5432/rmr
     username: postgres
@@ -28,4 +29,6 @@ sms:
   api-key: ${SMS_AERO_API_KEY}
   sms-text: ${SMS_TEXT:Your authentication code}
   sms-sign: ${SMS_SIGN:RMR RUZAVIN}
-  enabled: ${SMS_ENABLED:false}
+  enabled: ${SMS_ENABLED:true}
+server:
+  port: 80

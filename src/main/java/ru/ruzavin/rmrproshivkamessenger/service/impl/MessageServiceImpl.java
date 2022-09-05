@@ -15,13 +15,13 @@ import ru.ruzavin.rmrproshivkamessenger.exception.ChatNotExistsException;
 import ru.ruzavin.rmrproshivkamessenger.mapper.MessageMapper;
 import ru.ruzavin.rmrproshivkamessenger.repository.ChatRepository;
 import ru.ruzavin.rmrproshivkamessenger.repository.MessageRepository;
+import ru.ruzavin.rmrproshivkamessenger.repository.UserRepository;
 import ru.ruzavin.rmrproshivkamessenger.security.details.UserDetailsImpl;
 import ru.ruzavin.rmrproshivkamessenger.service.MessageService;
+import ru.ruzavin.rmrproshivkamessenger.util.RequestParamUtil;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
-
-import static ru.ruzavin.rmrproshivkamessenger.util.RequestParamUtil.handlePageSizeAndPageNumber;
 
 @Service
 @RequiredArgsConstructor
@@ -33,10 +33,14 @@ public class MessageServiceImpl implements MessageService {
 
 	private final MessageMapper messageMapper;
 
+	private final UserRepository userRepository;
+
+	private final RequestParamUtil requestParamUtil;
+
 	@Transactional
 	@Override
 	public MessageModel sendMessage(UUID chatId, SendMessageRequest request, UserDetailsImpl userDetails) {
-		UserEntity user = userDetails.getUser();
+		UserEntity user = userRepository.getReferenceById(userDetails.getUser().getUserId());
 
 		ChatEntity chat = getChat(chatId, user);
 		chat.setLatestMessage(OffsetDateTime.now());
@@ -54,11 +58,12 @@ public class MessageServiceImpl implements MessageService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public Page<MessageModel> getMessagesFromChat(UUID chatId, int pageSize, int pageNumber, UserDetailsImpl userDetails) {
-		UserEntity user = userDetails.getUser();
+	public Page<MessageModel> getMessagesFromChat(UUID chatId, Integer pageSize, Integer pageNumber, UserDetailsImpl userDetails) {
+		UserEntity user = userRepository.getReferenceById(userDetails.getUser().getUserId());
 		ChatEntity chat = getChat(chatId, user);
 
-		handlePageSizeAndPageNumber(pageSize, pageNumber);
+		pageNumber = requestParamUtil.handlePageNumber(pageNumber);
+		pageSize = requestParamUtil.handlePageSize(pageSize);
 		PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 		Page<MessageEntity> messagesFromChat = messageRepository.findAllByChat(pageRequest, chat);
 
@@ -67,9 +72,11 @@ public class MessageServiceImpl implements MessageService {
 
 	private ChatEntity getChat(UUID chatId, UserEntity user) {
 		ChatEntity chat = chatRepository.findById(chatId).orElseThrow(ChatNotExistsException::new);
+
 		if (!user.getChats().contains(chat)) {
 			throw new ChatMismatchException();
 		}
+
 		return chat;
 	}
 }

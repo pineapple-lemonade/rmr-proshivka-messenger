@@ -24,7 +24,7 @@ public class FriendController implements FriendApi {
 	private final FriendService friendService;
 
 	@Override
-	public PageResponse<List<UserModel>> getFriendsList(int pageSize, int pageNumber, UserDetailsImpl userDetails) {
+	public PageResponse<List<UserModel>> getFriendsList(Integer pageSize, Integer pageNumber, UserDetailsImpl userDetails) {
 		Page<UserModel> friendsPage = friendService.getFriendsList(pageSize, pageNumber, userDetails);
 
 		return PageResponse.<List<UserModel>>pageResponseBuilder()

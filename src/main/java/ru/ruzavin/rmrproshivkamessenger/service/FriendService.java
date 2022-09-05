@@ -6,6 +6,6 @@ import ru.ruzavin.rmrproshivkamessenger.dto.request.AddFriendRequest;
 import ru.ruzavin.rmrproshivkamessenger.security.details.UserDetailsImpl;
 
 public interface FriendService {
-	Page<UserModel> getFriendsList(int pageSize, int pageNumber, UserDetailsImpl userDetails);
+	Page<UserModel> getFriendsList(Integer pageSize, Integer pageNumber, UserDetailsImpl userDetails);
 	UserModel addFriend(AddFriendRequest request, UserDetailsImpl userDetails);
 }
