@@ -14,6 +14,8 @@ import ru.ruzavin.rmrproshivkamessenger.dto.request.CreateUserRequest;
 import ru.ruzavin.rmrproshivkamessenger.dto.response.ErrorResponse;
 import ru.ruzavin.rmrproshivkamessenger.dto.response.SuccessResponse;
 
+import javax.validation.Valid;
+
 @RequestMapping("/api/v1/user")
 public interface UserApi {
 
@@ -24,5 +26,5 @@ public interface UserApi {
 			content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	@PostMapping("/sign-up")
 	@ResponseStatus(HttpStatus.CREATED)
-	SuccessResponse<UserModel> createUser(@RequestBody CreateUserRequest request);
+	SuccessResponse<UserModel> createUser(@Valid @RequestBody CreateUserRequest request);
 }

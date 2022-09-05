@@ -29,6 +29,6 @@ sms:
   api-key: ${SMS_AERO_API_KEY}
   sms-text: ${SMS_TEXT:Your authentication code}
   sms-sign: ${SMS_SIGN:RMR RUZAVIN}
-  enabled: ${SMS_ENABLED:true}
+  enabled: ${SMS_ENABLED:false}
 server:
   port: 80
