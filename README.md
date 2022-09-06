@@ -8,7 +8,12 @@
 ## Also before these command you need to build your project/rebuild in case of changes by gradle tasks:
 - ``gradle clean``
 - ``gradle assemble``
+
+## Also you might need to configure SonarQube, just follow instructions on http://localhost:9000/ after container completely started
+
 ### Test coverage is 84%
+
+### Trello of project: [Trello](https://trello.com/b/KhI9qHeb/rmr-messenger)
 
 ### The task itself:
 ![img.png](img.png)
