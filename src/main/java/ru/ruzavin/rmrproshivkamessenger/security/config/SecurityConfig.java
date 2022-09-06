@@ -2,6 +2,7 @@ package ru.ruzavin.rmrproshivkamessenger.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -21,6 +22,7 @@ import static ru.ruzavin.rmrproshivkamessenger.security.constants.SecurityConsta
 @RequiredArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@ConditionalOnProperty(value = "spring.security.enabled", havingValue = "true")
 public class SecurityConfig {
 	private final UserDetailsService userDetailsServiceImpl;
 

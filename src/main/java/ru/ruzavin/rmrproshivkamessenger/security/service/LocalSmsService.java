@@ -8,7 +8,7 @@ import ru.ruzavin.rmrproshivkamessenger.dto.response.SendSmsResponse;
 @ConditionalOnProperty(name = "sms.enabled", havingValue = "false")
 public class LocalSmsService implements SmsService {
 	/*
-	 * in local sms service we don't send sms
+	 * in local sms ru.ruzavin.rmrproshivkamessenger.service we don't send sms
 	 */
 	@Override
 	public SendSmsResponse sendSms(String phone) {

@@ -1,5 +1,6 @@
 spring:
-
+  security:
+    enabled: true
   datasource:
     url: jdbc:postgresql://localhost:5432/rmr
     username: postgres

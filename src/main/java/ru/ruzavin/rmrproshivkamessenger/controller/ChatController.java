@@ -13,7 +13,7 @@ import ru.ruzavin.rmrproshivkamessenger.dto.response.SuccessResponse;
 import ru.ruzavin.rmrproshivkamessenger.security.details.UserDetailsImpl;
 import ru.ruzavin.rmrproshivkamessenger.service.ChatService;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,8 +29,8 @@ public class ChatController implements ChatApi {
 		return SuccessResponse.<ChatModel>successResponseBuilder()
 				.data(chatService.createChat(userId, userDetails))
 				.message("chat successfully created")
-				.status(HttpStatus.OK)
-				.timestamp(LocalDateTime.now())
+				.status(HttpStatus.CREATED)
+				.timestamp(OffsetDateTime.now())
 				.build();
 	}
 
@@ -39,8 +39,8 @@ public class ChatController implements ChatApi {
 		return SuccessResponse.<ChatModel>successResponseBuilder()
 				.data(chatService.createGroupChat(request, userDetails))
 				.message("chat successfully created")
-				.status(HttpStatus.OK)
-				.timestamp(LocalDateTime.now())
+				.status(HttpStatus.CREATED)
+				.timestamp(OffsetDateTime.now())
 				.build();
 	}
 
@@ -52,7 +52,7 @@ public class ChatController implements ChatApi {
 				.data(latestChats.getContent())
 				.message("latest chats received")
 				.status(HttpStatus.OK)
-				.timestamp(LocalDateTime.now())
+				.timestamp(OffsetDateTime.now())
 				.page(latestChats.getNumber())
 				.size(latestChats.getSize())
 				.totalElements(latestChats.getTotalElements())

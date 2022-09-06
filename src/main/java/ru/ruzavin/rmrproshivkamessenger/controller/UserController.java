@@ -9,7 +9,7 @@ import ru.ruzavin.rmrproshivkamessenger.dto.request.CreateUserRequest;
 import ru.ruzavin.rmrproshivkamessenger.dto.response.SuccessResponse;
 import ru.ruzavin.rmrproshivkamessenger.service.UserService;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class UserController implements UserApi {
 		return SuccessResponse.<UserModel>successResponseBuilder()
 				.message("user successfully created")
 				.status(HttpStatus.CREATED)
-				.timestamp(LocalDateTime.now())
+				.timestamp(OffsetDateTime.now())
 				.data(userService.createUser(request))
 				.build();
 	}
