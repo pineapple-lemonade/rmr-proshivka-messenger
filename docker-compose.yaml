@@ -35,5 +35,17 @@ services:
       - POSTGRES_DB=rmr
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=005s005rg
+  sonar:
+    container_name: sonar
+    image: "sonarqube"
+    volumes:
+      - sonar_data:/opt/sonarqube/data
+      - sonar_data:/opt/sonarqube/logs
+      - sonar_data:/opt/sonarqube/extensions
+    ports:
+      - "9000:9000"
+    networks:
+      - my_network
 volumes:
   postgres_data:
+  sonar_data:
