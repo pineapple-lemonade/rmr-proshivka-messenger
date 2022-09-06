@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 @AllArgsConstructor
@@ -22,7 +22,7 @@ public class AbstractResponse {
 	String message;
 
 	@Schema(name = "timestamp", description = "date when response created")
-	LocalDateTime timestamp;
+	OffsetDateTime timestamp;
 
 	@Schema(name = "status", description = "http status of response")
 	HttpStatus status;

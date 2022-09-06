@@ -13,7 +13,7 @@ import ru.ruzavin.rmrproshivkamessenger.dto.response.SuccessResponse;
 import ru.ruzavin.rmrproshivkamessenger.security.details.UserDetailsImpl;
 import ru.ruzavin.rmrproshivkamessenger.service.MessageService;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,7 +28,7 @@ public class MessageController implements MessageApi {
 	public SuccessResponse<MessageModel> sendMessageToChat(UUID chatId, SendMessageRequest request, UserDetailsImpl userDetails) {
 		return SuccessResponse.<MessageModel>successResponseBuilder()
 				.message("message successfully sent")
-				.timestamp(LocalDateTime.now())
+				.timestamp(OffsetDateTime.now())
 				.status(HttpStatus.CREATED)
 				.data(messageService.sendMessage(chatId, request, userDetails))
 				.build();
@@ -42,7 +42,7 @@ public class MessageController implements MessageApi {
 
 		return PageResponse.<List<MessageModel>>pageResponseBuilder()
 				.message("messages successfully received")
-				.timestamp(LocalDateTime.now())
+				.timestamp(OffsetDateTime.now())
 				.status(HttpStatus.OK)
 				.data(messagesFromChat.getContent())
 				.size(messagesFromChat.getSize())

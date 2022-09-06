@@ -15,6 +15,7 @@ import ru.ruzavin.rmrproshivkamessenger.dto.response.ValidationErrorResponse;
 import ru.ruzavin.rmrproshivkamessenger.exception.*;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +95,7 @@ public class CustomExceptionHandler {
 				.body(ValidationErrorResponse.builder()
 						.errors(validationErrorDtos)
 						.message("validation error")
-						.timestamp(LocalDateTime.now())
+						.timestamp(OffsetDateTime.now())
 						.status(HttpStatus.BAD_REQUEST)
 						.build());
 	}
@@ -104,7 +105,7 @@ public class CustomExceptionHandler {
 
 		return ErrorResponse.builder()
 				.message(exception.getMessage())
-				.timestamp(LocalDateTime.now())
+				.timestamp(OffsetDateTime.now())
 				.status(status)
 				.build();
 	}

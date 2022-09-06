@@ -13,7 +13,7 @@ import ru.ruzavin.rmrproshivkamessenger.dto.response.SuccessResponse;
 import ru.ruzavin.rmrproshivkamessenger.security.details.UserDetailsImpl;
 import ru.ruzavin.rmrproshivkamessenger.service.FriendService;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @RestController
@@ -30,7 +30,7 @@ public class FriendController implements FriendApi {
 		return PageResponse.<List<UserModel>>pageResponseBuilder()
 				.data(friendsPage.getContent())
 				.status(HttpStatus.OK)
-				.timestamp(LocalDateTime.now())
+				.timestamp(OffsetDateTime.now())
 				.message("successfully received friends list")
 				.totalPages(friendsPage.getTotalPages())
 				.totalElements(friendsPage.getTotalElements())
@@ -43,7 +43,7 @@ public class FriendController implements FriendApi {
 	public SuccessResponse<UserModel> addFriend(AddFriendRequest request, UserDetailsImpl userDetails) {
 		return SuccessResponse.<UserModel>successResponseBuilder()
 				.data(friendService.addFriend(request, userDetails))
-				.timestamp(LocalDateTime.now())
+				.timestamp(OffsetDateTime.now())
 				.status(HttpStatus.CREATED)
 				.message("friend successfully added")
 				.build();
