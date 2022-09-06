@@ -1,0 +1,39 @@
+version: '3.8'
+networks:
+  my_network:
+    name: my_network
+services:
+  RMR:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: messenger
+    image: "application_image"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATABASE_URL: jdbc:postgresql://postgres:5432/rmr
+      SPRING_DATABASE_USER: postgres
+      SPRING_DATABASE_PASSWORD: 005s005rg
+      SMS_AERO_EMAIL: ruzavin02@mail.ru
+      SMS_AERO_API_KEY: y2RNoP7glbiqywswkMe6O1PLc9cc
+    ports:
+      - "80:80"
+    networks:
+      - my_network
+  postgres:
+    container_name: postgres_rmr
+    image: "postgres:11-alpine"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5433"
+    networks:
+      - my_network
+    environment:
+      - POSTGRES_DB=rmr
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=005s005rg
+volumes:
+  postgres_data:
