@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: v1/20220901-1-create-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: v1/20220903-2-create-friends-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: v1/20220904-3-add-column-to-chat.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: v1/20220904-4-add-code-column-to-user.yaml
+      relativeToChangelogFile: true

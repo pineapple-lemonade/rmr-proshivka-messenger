@@ -1,0 +1,35 @@
+spring:
+  security:
+    enabled: true
+  datasource:
+    url: ${SPRING_DATABASE_URL:jdbc:postgresql://localhost:5432/rmr}
+    username: ${SPRING_DATABASE_USER:postgres}
+    password: ${SPRING_DATABASE_PASSWORD:005s005rg}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    change-log: classpath:changelog/database_changelog.yaml
+default:
+  page:
+    number: 0
+    size: 10
+application:
+  token:
+    access:
+      expires:
+        time: 3600000
+    refresh:
+      expires:
+        time: 86400000
+jwt:
+  secret: goshanchik
+sms:
+  email: ${SMS_AERO_EMAIL}
+  api-key: ${SMS_AERO_API_KEY}
+  sms-text: ${SMS_TEXT:Your authentication code}
+  sms-sign: ${SMS_SIGN:SMS Aero}
+  enabled: true
+server:
+  port: 80

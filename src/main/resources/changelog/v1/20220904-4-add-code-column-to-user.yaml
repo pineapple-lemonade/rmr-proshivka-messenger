@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      author: Ruzavin Georgy
+      id: add code column to user
+      changes:
+        - addColumn:
+            tableName: system_user
+            columns:
+              - column:
+                  name: sms_code
+                  type: varchar(4)
