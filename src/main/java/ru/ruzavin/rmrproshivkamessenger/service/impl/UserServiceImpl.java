@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 				.name(request.getName())
 				.phone(request.getPhone())
 				.password(passwordEncoder.encode(request.getPassword()))
-				.state(UserState.NOT_CONFIRMED)
+				.state(UserState.CONFIRMED)
 				.build();
 
 		return userMapper.fromEntity(userRepository.save(newUser));
